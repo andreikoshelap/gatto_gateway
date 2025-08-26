@@ -1,0 +1,47 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36" version="28.1.1">
+  <diagram name="OutboxKafkaIdempotency" id="0">
+    <mxGraphModel dx="1426" dy="863" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="800" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="user" value="Receipt" style="shape=rectangle;fillColor=#dae8fc;strokeColor=#6c8ebf;rounded=1;" parent="1" vertex="1">
+          <mxGeometry x="40" y="160" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="service" value="GatewayAPI&#xa;websocket" style="shape=rectangle;fillColor=#d5e8d4;strokeColor=#82b366;rounded=1;" parent="1" vertex="1">
+          <mxGeometry x="300" y="160" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="outbox" value="Outbox table&#xa;(outbox_events)" style="shape=rectangle;fillColor=#e1d5e7;strokeColor=#9673a6;rounded=1;" parent="1" vertex="1">
+          <mxGeometry x="290" y="300" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="kafka" value="Kafka" style="shape=rectangle;fillColor=#fff2cc;strokeColor=#d6b656;rounded=1;" parent="1" vertex="1">
+          <mxGeometry x="560" y="180" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="consumer" value="Consumer" style="shape=rectangle;fillColor=#f8cecc;strokeColor=#b85450;rounded=1;" parent="1" vertex="1">
+          <mxGeometry x="830" y="180" width="170" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" value="Request- write off €100" style="endArrow=block;rounded=0;" parent="1" source="user" target="service" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="INSERT outbox_events&#xa;(same transaction)" style="endArrow=block;rounded=0;" parent="1" source="service" target="outbox" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="Poller/CDC publish &#xa;event" style="endArrow=block;rounded=0;" parent="1" source="outbox" target="kafka" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="Message delivered" style="endArrow=block;rounded=0;" parent="1" source="kafka" target="consumer" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" value="Duplicate ignored" style="endArrow=block;dashed=1;strokeColor=red;" parent="1" edge="1">
+          <mxGeometry x="0.0154" y="-28" relative="1" as="geometry">
+            <mxPoint x="680" y="229.99694915254233" as="sourcePoint" />
+            <mxPoint x="830" y="232.5393220338983" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="note" value="Idempotency in cosumer:&lt;br&gt;- hold processed_event_ids&lt;br&gt;- check eventId before apply" style="shape=note;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="830" y="270" width="260" height="90" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
